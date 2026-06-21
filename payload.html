@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Diagnostic</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden;
+            font-family: 'Segoe UI', sans-serif; background-color: #000;
+        }
+        #loading-blackout {
+            display: block; background-color: #000; height: 100vh; width: 100vw;
+            position: fixed; top: 0; left: 0; z-index: 99998;
+        }
+        #bsod-screen {
+            display: none; background-color: #0078d7; color: white; height: 100vh; width: 100vw;
+            flex-direction: column; justify-content: center; align-items: flex-start;
+            box-sizing: border-box; padding-left: 15vw; cursor: none; position: fixed; top: 0; left: 0; z-index: 99999;
+        }
+        .emoji { font-size: 12vw; margin-bottom: 2vh; font-weight: lighter; }
+        .message { font-size: 2vw; line-height: 1.5; max-width: 70vw; font-weight: lighter; }
+        .details { margin-top: 5vh; display: flex; align-items: center; gap: 2vw; }
+        .qr-box { width: 10vw; height: 10vw; background-color: #0078d7; display: flex; align-items: center; justify-content: center; }
+        .progress-text { font-size: 1.2vw; }
+        
+        /* Authentic Windows BSOD Style QR Code Layout */
+        .bsod-qr {
+            width: 100%; height: 100%; background: white; padding: 6px; box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STEP 1: BLACK OUT FOR 0.5 SECONDS -->
+    <div id="loading-blackout"></div>
+
+    <!-- STEP 2: SHOW LOUD BLUE SCREEN -->
+    <div id="bsod-screen">
+        <div class="emoji">:(</div>
+        <div class="message">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</div>
+        <div class="message" style="margin-top: 2vh; font-weight: normal;"><span id="percentage">2</span>% complete</div>
+        
+        <div class="details">
+            <div class="qr-box">
+                <!-- High-accuracy simulated Windows Error QR Code block layout -->
+                <svg class="bsod-qr" viewBox="0 0 29 29" shape-rendering="crispEdges">
+                    <path fill="#ffffff" d="M0,0 h29 v29 h-29 z"/>
+                    <path fill="#000000" d="M0,0 h7 v1 h-7 z M0,1 h1 v5 h1 v-5 h3 v5 h1 v-5 h1 v7 h-7 z M2,2 h3 v3 h-3 z M0,6 h7 v1 h-7 z M22,0 h7 v1 h-7 z M22,1 h1 v5 h1 v-5 h3 v5 h1 v-5 h1 v7 h-7 z M24,2 h3 v3 h-3 z M22,6 h7 v1 h-7 z M0,22 h7 v1 h-7 z M0,23 h1 v5 h1 v-5 h3 v5 h1 v-5 h1 v7 h-7 z M2,24 h3 v3 h-3 z M0,28 h7 v1 h-7 z M9,2 h1 v1 h-1 z M12,0 h2 v1 h-2 z M13,2 h3 v1 h-3 z M18,1 h1 v2 h-1 z M19,3 h1 v1 h-1 z M10,5 h2 v1 h-2 z M15,4 h1 v3 h-1 z M11,8 h1 v2 h-1 z M8,11 h3 v1 h-3 z M13,10 h1 v1 h-1 z M17,9 h2 v1 h-2 z M16,11 h2 v2 h-2 z M20,11 h2 v1 h-2 z M23,9 h2 v1 h-2 z M27,8 h1 v2 h-1 z M9,13 h1 v2 h-1 z M12,14 h1 v1 h-1 z M14,13 h1 v1 h-1 z M2,17 h4 v1 h-4 z M11,16 h2 v2 h-2 z M18,15 h3 v1 h-3 z M25,15 h3 v1 h-3 z M1,20 h2 v1 h-2 z M9,19 h1 v2 h-1 z M14,20 h1 v1 h-1 z M16,19 h2 v1 h-2 z M24,19 h1 v1 h-1 z M27,19 h2 v1 h-2 z M8,23 h1 v2 h-1 z M11,22 h2 v1 h-2 z M13,24 h2 v1 h-2 z M17,23 h3 v1 h-3 z M21,24 h1 v2 h-1 z M26,22 h2 v1 h-2 z M10,26 h1 v2 h-1 z M15,27 h3 v1 h-3 z M19,26 h1 v1 h-1 z M23,27 h1 v2 h-1 z M28,26 h1 v2 h-1 z"/>
+                </svg>
+            </div>
+            <div class="progress-text">
+                For more information about this issue and possible fixes, visit <br>
+                <span style="color: #a0c2e8;">https://windows.com</span><br><br>
+                If you call a support person, give them this info:<br>
+                Stop Code: DPC_WATCHDOG_VIOLATION
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const doc = document.documentElement;
+            if (doc.requestFullscreen) doc.requestFullscreen();
+            else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+
+            setTimeout(function() {
+                document.getElementById('loading-blackout').style.display = 'none';
+                document.getElementById('bsod-screen').style.display = 'flex';
+
+                startBlastingAudio();
+                startUltraSlowCounter();
+            }, 500);
+        };
+
+        function startUltraSlowCounter() {
+            let count = 2; 
+            document.getElementById('percentage').innerText = count;
+
+            setInterval(function() {
+                if (count < 100) {
+                    count++;
+                    document.getElementById('percentage').innerText = count;
+                }
+            }, 20000); // 20 Seconds exactly
+        }
+
+        function startBlastingAudio() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                const modulationGain = audioCtx.createGain();
+
+                osc1.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(115, audioCtx.currentTime); 
+
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(50, audioCtx.currentTime);
+                modulationGain.gain.setValueAtTime(65, audioCtx.currentTime);
+
+                gainNode.gain.setValueAtTime(3.5, audioCtx.currentTime); // High loudness multiplier
+
+                osc2.connect(modulationGain);
+                modulationGain.connect(osc1.frequency);
+                osc1.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc1.start();
+                osc2.start();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        window.onbeforeunload = function() { return "System frozen."; };
+    </script>
+</body>
+</html>
