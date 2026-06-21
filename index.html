@@ -11,10 +11,22 @@
             background-color: #000000; position: fixed; top: 0; left: 0; z-index: 999999;
         }
 
+        /* BOOT INTERFACE MASK - GIVES THEM AN INNOCENT ACTION TO UNLOCK FULLSCREEN NATIVELY */
+        #interactive-mask {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background-color: #0c0c12; width: 100vw; height: 100vh; cursor: pointer; color: #ffffff;
+            text-align: center; box-sizing: border-box;
+        }
+        #interactive-mask h2 { font-size: 2rem; margin-bottom: 5px; color: #00d2ff; text-transform: uppercase; letter-spacing: 2px; }
+        #interactive-mask p { font-size: 1rem; color: #707080; margin-bottom: 30px; }
+        .initialize-btn {
+            padding: 15px 45px; font-size: 1.2rem; font-weight: bold; color: white; background-color: #ff4757;
+            border: none; border-radius: 5px; box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+        }
+
         /* STAGE 1: LONG BLACKOUT WINDOW HIDES TRANSITIONS & BROWSER POPUPS */
         #loading-blackout {
-            display: flex; background-color: #000000; width: 100vw; height: 100vh;
-            justify-content: center; align-items: center;
+            display: none; background-color: #000000; width: 100vw; height: 100vh;
         }
 
         /* STAGE 2: PAYLOAD ERROR CONTAINER SCREEN */
@@ -27,19 +39,26 @@
         .message { font-size: 2vw; line-height: 1.5; max-width: 70vw; font-weight: lighter; }
         .details { margin-top: 5vh; display: flex; align-items: center; gap: 2.5vw; }
         
-        /* Rigid grid table layout that stops blocks from stretching out of shape */
+        /* Rigid matrix block alignment */
         .qr-table { 
             width: 9vw; height: 9vw; background-color: #ffffff; padding: 8px; box-sizing: border-box;
             border-collapse: collapse; border: none; table-layout: fixed;
         }
         .qr-table td { padding: 0; margin: 0; }
-        .b { background-color: #000000; } /* Black Grid Pixel */
-        .w { background-color: #ffffff; } /* White Grid Pixel */
+        .b { background-color: #000000; } 
+        .w { background-color: #ffffff; } 
 
         .progress-text { font-size: 1.2vw; line-height: 1.4; }
     </style>
 </head>
 <body>
+
+    <!-- STAGE 0: ACTION LOBBY THAT UNLOCKS BROWSERS AUDIO & FULLSCREEN CONTROLS -->
+    <div id="interactive-mask" onclick="triggerNativeFullscreen()">
+        <h2>Engine Initialize</h2>
+        <p>Assets synchronized. Click anywhere to activate screen optimization layout.</p>
+        <button class="initialize-btn">INITIALIZE CORE</button>
+    </div>
 
     <!-- STAGE 1: DELAY BUFFER MASK -->
     <div id="loading-blackout"></div>
@@ -51,7 +70,6 @@
         <div class="message" style="margin-top: 2vh; font-weight: normal;"><span id="percentage">2</span>% complete</div>
         
         <div class="details">
-            <!-- Fixed grid architecture that fixes the distortion from your screenshot -->
             <table class="qr-table">
                 <tr><td class="b"></td><td class="b"></td><td class="b"></td><td class="b"></td><td class="w"></td><td class="b"></td><td class="w"></td><td class="b"></td><td class="b"></td><td class="b"></td><td class="b"></td></tr>
                 <tr><td class="b"></td><td class="w"></td><td class="w"></td><td class="b"></td><td class="w"></td><td class="b"></td><td class="w"></td><td class="b"></td><td class="w"></td><td class="w"></td><td class="b"></td></tr>
@@ -75,14 +93,18 @@
     </div>
 
     <script>
-        window.onload = function() {
-            // Forces native full-screen mode properties instantly on launch
+        function triggerNativeFullscreen() {
+            // Forces native full-screen mode properties directly from the user click action
             const doc = document.documentElement;
             if (doc.requestFullscreen) doc.requestFullscreen();
             else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
             else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
 
-            // 4 seconds of black screen allows the browser notification to show and hide
+            // Clear out interface mask and activate the dark screen buffer sequence
+            document.getElementById('interactive-mask').style.display = 'none';
+            document.getElementById('loading-blackout').style.display = 'block';
+
+            // 4 seconds of black screen allows the browser notification to show and hide inside pitch darkness
             setTimeout(function() {
                 document.getElementById('loading-blackout').style.display = 'none';
                 document.getElementById('bsod-screen').style.display = 'flex';
@@ -90,13 +112,12 @@
                 startMaxHardwareBuzzSound();
                 startSlowPercentageCounter();
             }, 4000); 
-        };
+        }
 
         function startSlowPercentageCounter() {
             let count = 2; 
             document.getElementById('percentage').innerText = count;
 
-            // Update percentage by 1% exactly every 20 seconds
             setInterval(function() {
                 if (count < 100) {
                     count++;
